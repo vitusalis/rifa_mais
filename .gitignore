@@ -1,0 +1,11 @@
+.env
+env/
+
+
+/rifa_mais/.env
+
+__pycache__
+
+.idea
+/photos/
+/dist/
