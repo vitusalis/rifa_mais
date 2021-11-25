@@ -3,22 +3,19 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.db import models
 
-STATUS = (
-    ('AVA', 'Disponível'),
-    ('RES', 'Reservado'),
-    ('PAI', 'Pago')
-)
+STATUS = (("AVA", "Disponível"), ("RES", "Reservado"), ("PAI", "Pago"))
 
 
 class Ticket(models.Model):
     # Auto-generated
-    status = models.CharField(max_length=20, choices=STATUS, default='RES')
+    status = models.CharField(max_length=20, choices=STATUS, default="RES")
     date_creation = models.DateTimeField(auto_now_add=True, blank=True, null=True, verbose_name="Data de reserva")
-    _id = models.CharField(max_length=39, null=False, blank=False, default='')
+    _id = models.CharField(max_length=39, null=False, blank=False, default="")
 
     # Required
-    raffle = models.ForeignKey('raffles.Raffle', on_delete=models.CASCADE,
-                               verbose_name='Sorteio', null=True, blank=True)
+    raffle = models.ForeignKey(
+        "raffles.Raffle", on_delete=models.CASCADE, verbose_name="Sorteio", null=True, blank=True
+    )
     ticket_number = models.PositiveIntegerField(null=False, verbose_name="Número")
     name = models.CharField(max_length=255, verbose_name="Nome")
     email = models.EmailField(max_length=255)
@@ -44,14 +41,14 @@ class Ticket(models.Model):
         # ticket already purchased
         if self.id:
             if self.raffle.ticket_set.filter(ticket_number=self.ticket_number).exclude(id=self.id):
-                raise ValidationError("Invalid ticket number", code='Parece que este ticket já foi reservado')
+                raise ValidationError("Invalid ticket number", code="Parece que este ticket já foi reservado")
 
         self._id = f"{uuid.uuid1().int}"
         super(Ticket, self).save(*args, **kwargs)
 
     class Meta:
-        ordering = ['ticket_number']
-        unique_together = ('raffle', 'ticket_number')
+        ordering = ["ticket_number"]
+        unique_together = ("raffle", "ticket_number")
 
     def days_reserved(self):
         return (timezone.now() - self.date_creation).days
