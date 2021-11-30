@@ -31,7 +31,7 @@ DEBUG = env("DEBUG", default=False)
 ASAAS_URL = env("ASAAS_URL", default="https://www.asaas.com/api/v3/")
 ASAAS_KEY = env("ASAAS_KEY", default="ASAAS_KEY")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env('ALLOWED_HOSTS', default='*').split(',')
 
 # Application definition
 
