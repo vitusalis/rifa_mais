@@ -12,7 +12,7 @@ class Raffle(models.Model):
     status = models.CharField(max_length=20, choices=STATUS, default="SOO")
 
     # Required
-    name = models.CharField(max_length=155, null=True, blank=True, verbose_name="Sorteio")
+    name = models.CharField(max_length=155, verbose_name="Sorteio")
     ticket_amount = models.PositiveIntegerField(null=False, default=1, verbose_name="Quantidade de tickets")
     ticket_price = models.FloatField(null=False, default=1, verbose_name="Preço do ticket")
 

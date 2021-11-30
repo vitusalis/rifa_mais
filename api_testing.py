@@ -1,5 +1,5 @@
 import requests
-
+import json
 BASE_URL = "http://127.0.0.1:8000/api/"
 # get raffles
 
@@ -11,23 +11,26 @@ def get_raffles():
     return {"success": False, "body": response.content}
 
 
-def post_ticket(raffle_id, ticket_number, name, email, phone=None, instagram=None):
+def post_ticket(raffle_id, ticket_number, name, email, phone, instagram=None):
     data = {
-        "raffle_id": raffle_id,
+        "raffle": raffle_id,
         "ticket_number": ticket_number,
         "name": name,
         "email": email,
-        "phone": phone,
-        "instagram": instagram,
+        "phone": phone
     }
 
-    response = requests.post(BASE_URL + "tickets/", data=data)
+    if instagram:
+        data["instagram"] = instagram
+        
+
+    headers = { "Content-Type": "application/json" }
+    response = requests.post(BASE_URL + "tickets/", data=json.dumps(data), headers=headers)
     if response.ok:
-        return {"success": True, "body": response.json()}
-    try:
-        return {"success": False, "body": response.json()}
-    except:
-        return {"success": False, "body": response.content}
+        return True
+    print(response.status_code)
+    print(data)
+    return False
 
 
 def get_ticket_by_email(email):
@@ -36,6 +39,17 @@ def get_ticket_by_email(email):
         return {"success": True, "body": response.json()}
     return {"success": False, "body": response.content}
 
+print("\nGet rifas")
 print(get_raffles())
 
-# print(get_ticket_by_email("victorsalles1997@gmail.com"))
+print("\nPost ticket")
+response = post_ticket(2, 5, "Victor 2 novo", "victor.teste@gmail.com", "219123445678")
+print(response)
+
+print("\nGet ticket by email")
+response = get_ticket_by_email("victor.teste@gmail.com")
+if response.get('success'):
+    for item in response.get('body'):
+        print(item)
+else:
+    print("Failed")
