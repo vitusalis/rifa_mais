@@ -20,6 +20,7 @@ class TicketSerializer(serializers.ModelSerializer):
             'name': {'required': True},
             'email': {'required': True},
             'phone': {'required': True},
+            'cpfCnpj': {'required': True, 'write_only':True},
         }
 
 
@@ -55,6 +56,7 @@ class TicketViewSet(viewsets.ModelViewSet):
             return Response({"error": str(e)}, status=400)
         
         if response.get("type") == "error":
+            instance.delete()
             return Response(response, status=400)
 
         data = {**serializer.data, "payment_link": response.get("payment_link")}
