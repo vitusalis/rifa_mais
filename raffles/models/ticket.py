@@ -76,7 +76,7 @@ class Ticket(models.Model):
 
             return {"type": "error", "message": "Não foi possível registrar o pagamento"}
 
-        return {"type": "error", "message": "Não foi possível registrar o usuário"}
+        return {"type": "error", "message": "Não foi possível registrar o usuário. Por favor, verifique se o CPF está correto"}
 
 
 {"raffle_id": 2, "ticket_number": 3, "name": "Victor 2", "email": "victor.teste@gmail.com"}

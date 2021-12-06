@@ -51,6 +51,9 @@ class TicketViewSet(viewsets.ModelViewSet):
         
         try:
             response = instance.create_payment()
+            if response.get("type") == "error":
+                instance.delete()
+                return Response(response, status=400)
         except Exception as e:
             instance.delete()
             return Response({"error": str(e)}, status=400)
