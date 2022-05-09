@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+
 import environ
 
 env = environ.Env(
@@ -32,6 +33,14 @@ ASAAS_URL = env("ASAAS_URL", default="https://www.asaas.com/api/v3/")
 ASAAS_KEY = env("ASAAS_KEY", default="ASAAS_KEY")
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS', default='*').split(',')
+
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1",
+    "https://127.0.0.1",
+]
 
 # Application definition
 
@@ -84,7 +93,14 @@ WSGI_APPLICATION = "rifa_mais.wsgi.application"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 
-DATABASES = {"default": env.db()}
+DATABASES = {
+    "default": env.db()
+    }
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination", 
+    "PAGE_SIZE": 10000
+    }
 
 DEFAULT_FILE_STORAGE = "storages.backends.dropbox.DropBoxStorage"
 DROPBOX_OAUTH2_TOKEN = env("DROPBOX_OAUTH2_TOKEN")
@@ -111,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "pt-br"
 
 TIME_ZONE = "America/Sao_Paulo"
 
@@ -124,21 +140,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "dist/static"),
+    os.path.join(BASE_DIR, "static"),
 ]
 
 STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR + "/staticfiles"
 
-REST_FRAMEWORK = {"DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination", "PAGE_SIZE": 10000}
 
-# CORS_ORIGIN_WHITELIST = env('CORS_ORIGIN_WHITELIST')
-# TODO: REMOVE
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_METHODS = ["GET", "POST"]
+# Whitenoise
 
-CSRF_TRUSTED_ORIGINS = [
-    "127.0.0.1",
-]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

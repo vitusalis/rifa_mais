@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
-from django.utils.translation import ugettext_lazy as _
 
 from raffles.models import Raffle
 from raffles.models import Ticket
@@ -9,13 +8,13 @@ from django.utils import timezone
 
 
 class DaysReserved(SimpleListFilter):
-    title = _('Dias reservado')
+    title = 'Dias reservado'
 
     parameter_name = 'dias'
 
     def lookups(self, request, model_admin):
         return (
-            ('2', _('2 dias úteis')),
+            ('2', '2 dias úteis'),
         )
 
     def queryset(self, request, queryset):
