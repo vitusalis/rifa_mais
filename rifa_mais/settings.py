@@ -102,9 +102,6 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 10000
     }
 
-DEFAULT_FILE_STORAGE = "storages.backends.dropbox.DropBoxStorage"
-DROPBOX_OAUTH2_TOKEN = env("DROPBOX_OAUTH2_TOKEN")
-DROPBOX_ROOT_PATH = env("DROPBOX_ROOT_PATH")
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -150,8 +147,16 @@ STATICFILES_DIRS = [
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR + "/staticfiles"
 
-
-# Whitenoise
+# --- AWS S3 config ---
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default=None)
+if AWS_ACCESS_KEY_ID is not None:
+    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default=None)
+    AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default=None)
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    DEFAULT_FILE_STORAGE = 'storage_backends.MediaStorage'
+else:
+    MEDIA_URL = env('MEDIA_URL', default='/media/')
+    MEDIA_ROOT = os.path.join(BASE_DIR, '.media')
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
